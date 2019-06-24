@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
 
 namespace PostReflexion
 {
@@ -23,5 +20,19 @@ namespace PostReflexion
     public class Camion : BaseClass
     {
         public bool EsVehiculoLargo { get; set; }
+    }
+
+    public class ClaseEjemplo
+    {
+        private int _valor;
+        public ClaseEjemplo(int valor)
+        {
+            _valor = valor;
+        }
+        public int Multiplicar(int por)
+        {
+            Console.WriteLine($"Llamada a {nameof(Multiplicar)} con parámetro {por}");
+            return _valor * por;
+        }
     }
 }
