@@ -29,6 +29,12 @@ namespace PostReflexion
         {
             _valor = valor;
         }
+
+        public ClaseEjemplo()
+        {
+            _valor = 0;
+        }
+
         public int Multiplicar(int por)
         {
             Console.WriteLine($"Llamada a {nameof(Multiplicar)} con parámetro {por}");
