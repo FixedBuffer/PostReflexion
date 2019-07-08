@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
-using Newtonsoft.Json;
 
 namespace PostReflexion
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             //===============Ejemplos sobre Assembly=================
             //=======================================================
@@ -27,7 +25,7 @@ namespace PostReflexion
 
         //===============Ejemplos sobre Assembly=================
         //=======================================================
-        static void EjemploInformacionEnsamblado()
+        private static void EjemploInformacionEnsamblado()
         {
             Console.WriteLine($"Información del ensamblado");
             //var assembly = Assembly.LoadFile("ruta al fichero");
@@ -37,7 +35,7 @@ namespace PostReflexion
             Console.WriteLine(assembly.FullName);
 
             // The AssemblyName type can be used to parse the full name.
-            AssemblyName assemName = assembly.GetName();
+            var assemName = assembly.GetName();
             Console.WriteLine("\nNombre: {0}", assemName.Name);
             Console.WriteLine("Versión: {0}.{1}",
                 assemName.Version.Major, assemName.Version.Minor);
@@ -50,7 +48,7 @@ namespace PostReflexion
             Console.WriteLine();
         }
 
-        static void EjemploClaseDinamica()
+        private static void EjemploClaseDinamica()
         {
             Console.WriteLine($"Clase dinámica");
             //var assembly = Assembly.LoadFile("ruta al fichero");
@@ -76,16 +74,16 @@ namespace PostReflexion
 
         //===============Ejemplos sobre Module=================
         //=======================================================
-        static void EjemploConstructores()
+        private static void EjemploConstructores()
         {
             Console.WriteLine($"Constuctores");
             var className = "PostReflexion.ClaseEjemplo";
             var assembly = Assembly.GetAssembly(typeof(Program));
-            var constructors = assembly.GetType(className).GetConstructors();
+            var type = assembly.GetType(className);
 
             //Obtenemos los constructores
-            var constructorConParametros = assembly.GetType(className).GetConstructor(new[] { typeof(int) }); //Contructor con parametro int
-            var constructorSinParametros = assembly.GetType(className).GetConstructor(Type.EmptyTypes); //Constructor genérico
+            var constructorConParametros = type.GetConstructor(new[] { typeof(int) }); //Contructor con parametro int
+            var constructorSinParametros = type.GetConstructor(Type.EmptyTypes); //Constructor genérico
 
             //Creamos el objeto de manera dinámica
             var objetoDinamicoConParametros = constructorConParametros.Invoke(new object[] { 2 });
@@ -105,11 +103,13 @@ namespace PostReflexion
 
         //===============Ejemplos con extensiones================
         //=======================================================
-        static void EjemploExtensionesClasesHijas()
+        private static void EjemploExtensionesClasesHijas()
         {
             Console.WriteLine($"Acceso a la propiedad mediante extensiones");
-            var claseHija = new Camion();
-            claseHija.EsVehiculoLargo = false;
+            var claseHija = new Camion
+            {
+                EsVehiculoLargo = false
+            };
             var claseBase = (BaseClass)claseHija;
             Console.WriteLine($"Comprobación de una clase que SI tiene la propiedad {claseBase.EsVehiculoLargo()}");
             Console.WriteLine($"Comprobación de una clase que NO tiene la propiedad {new BaseClass().EsVehiculoLargo()}");
