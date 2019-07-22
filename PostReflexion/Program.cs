@@ -116,9 +116,8 @@ namespace PostReflexion
             var assembly = Assembly.GetAssembly(typeof(Program));
             var type = assembly.GetType(className);
 
-            //Obtenemos los constructores
+            //Obtenemos el constructor
             var constructorConParametros = type.GetConstructor(new[] { typeof(int) }); //Contructor con parametro int
-            var constructorSinParametros = type.GetConstructor(Type.EmptyTypes); //Constructor genérico
 
             //Creamos el objeto de manera dinámica
             var objetoConParametros = constructorConParametros.Invoke(new object[] { 2 });
@@ -140,7 +139,7 @@ namespace PostReflexion
             var assembly = Assembly.GetAssembly(typeof(Program));
             var type = assembly.GetType(className);
 
-            //Obtenemos los constructores
+            //Obtenemos el constructor
             var constructorConParametros = type.GetConstructor(new[] { typeof(int) }); //Contructor con parametro int
 
             //Creamos el objeto de manera dinámica
@@ -159,7 +158,7 @@ namespace PostReflexion
             var assembly = Assembly.GetAssembly(typeof(Program));
             var type = assembly.GetType(className);
 
-            //Obtenemos los constructores
+            //Obtenemos el constructor
             var constructorConParametros = type.GetConstructor(new[] { typeof(int) }); //Contructor con parametro int
 
             //Creamos el objeto de manera dinámica
