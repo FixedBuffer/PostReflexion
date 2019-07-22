@@ -16,6 +16,12 @@ namespace PostReflexion
             //=======================================================
             EjemploConstructores();
 
+            //===============Ejemplos sobre Métodos==================
+            //=======================================================
+            EjemploMetodoReflexion();
+            EjemploMetodoDinamic();
+            EjemploMetodoDelegado();
+
             //===============Ejemplos con extensiones================
             //=======================================================
             EjemploExtensionesClasesHijas();
@@ -72,7 +78,7 @@ namespace PostReflexion
             Console.WriteLine();
         }
 
-        //===============Ejemplos sobre Module=================
+        //===============Ejemplos sobre Construcores=================
         //=======================================================
         private static void EjemploConstructores()
         {
@@ -86,17 +92,87 @@ namespace PostReflexion
             var constructorSinParametros = type.GetConstructor(Type.EmptyTypes); //Constructor genérico
 
             //Creamos el objeto de manera dinámica
-            var objetoDinamicoConParametros = constructorConParametros.Invoke(new object[] { 2 });
+            dynamic objetoDinamicoConParametros = constructorConParametros.Invoke(new object[] { 2 });
             var objetoDinamicoSinParametros = constructorSinParametros.Invoke(new object[] { });
 
             // Creamos una referencia al método   
             var m = assembly.GetType(className).GetMethod("Multiplicar");
 
             //Llamamos al método pasandole el objeto creado dinámicamente y los argumentos dentro de un object[]
-            var retConstructorParamatrizado = m.Invoke(objetoDinamicoConParametros, new object[] { 3 });
+            var retConstructorParamatrizado = objetoDinamicoConParametros.Multiplicar(3);
             var retConstructorGenerico = m.Invoke(objetoDinamicoSinParametros, new object[] { 3 });
             Console.WriteLine($"El retorno de la función con constructor parametrizado es: {retConstructorParamatrizado}");
             Console.WriteLine($"El retorno de la función con constructor genérico es: {retConstructorGenerico}");
+            Console.WriteLine();
+        }
+
+
+        //===============Ejemplos sobre Métodos=================
+        //=======================================================
+        private static void EjemploMetodoReflexion()
+        {
+            Console.WriteLine($"Metodo reflexión");
+            var className = "PostReflexion.ClaseEjemplo";
+            var assembly = Assembly.GetAssembly(typeof(Program));
+            var type = assembly.GetType(className);
+
+            //Obtenemos los constructores
+            var constructorConParametros = type.GetConstructor(new[] { typeof(int) }); //Contructor con parametro int
+            var constructorSinParametros = type.GetConstructor(Type.EmptyTypes); //Constructor genérico
+
+            //Creamos el objeto de manera dinámica
+            var objetoConParametros = constructorConParametros.Invoke(new object[] { 2 });
+
+            // Creamos una referencia al método   
+            var m = assembly.GetType(className).GetMethod("Multiplicar");
+
+            //Llamamos al método pasandole el objeto creado dinámicamente y los argumentos dentro de un object[]
+            var retConstructorParamatrizado = m.Invoke(objetoConParametros, new object[] { 3 });
+
+            Console.WriteLine($"El retorno de la función con constructor parametrizado es: {retConstructorParamatrizado}");
+            Console.WriteLine();
+        }
+
+        private static void EjemploMetodoDinamic()
+        {
+            Console.WriteLine($"Metodo Dinamic");
+            var className = "PostReflexion.ClaseEjemplo";
+            var assembly = Assembly.GetAssembly(typeof(Program));
+            var type = assembly.GetType(className);
+
+            //Obtenemos los constructores
+            var constructorConParametros = type.GetConstructor(new[] { typeof(int) }); //Contructor con parametro int
+
+            //Creamos el objeto de manera dinámica
+            dynamic objetoDinamicoConParametros = constructorConParametros.Invoke(new object[] { 2 });
+
+            //Llamamos al método 
+            var retConstructorParamatrizado = objetoDinamicoConParametros.Multiplicar(3);
+            Console.WriteLine($"El retorno de la función con constructor parametrizado es: {retConstructorParamatrizado}");
+            Console.WriteLine();
+        }
+
+        private static void EjemploMetodoDelegado()
+        {
+            Console.WriteLine($"Metodo Dinamic");
+            var className = "PostReflexion.ClaseEjemplo";
+            var assembly = Assembly.GetAssembly(typeof(Program));
+            var type = assembly.GetType(className);
+
+            //Obtenemos los constructores
+            var constructorConParametros = type.GetConstructor(new[] { typeof(int) }); //Contructor con parametro int
+
+            //Creamos el objeto de manera dinámica
+            object objetoDinamicoConParametros = constructorConParametros.Invoke(new object[] { 2 });
+
+            
+            //Creamos el delegado pasandole el tipo, una referencia al objeto sobre el que va a trabajar, y el nombre del metodo
+            //Delegate.CreateDelegate tiene diferentes parametros en función de lo que queramos hacer
+            Func<int, int> delegateMethod = (Func<int, int>)Delegate.CreateDelegate(typeof(Func<int, int>), objetoDinamicoConParametros, "Multiplicar");
+
+            //Llamamos al método 
+            var retDelegado = delegateMethod(3);
+            Console.WriteLine($"El retorno de la función con constructor parametrizado es: {retDelegado}");
             Console.WriteLine();
         }
 
